@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, context } = await req.json();
+    const { prompt, context, model = "google/gemini-2.5-flash" } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     if (!LOVABLE_API_KEY) {
@@ -35,7 +35,7 @@ Keep responses focused and actionable.`;
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: model,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }

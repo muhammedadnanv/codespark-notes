@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Loader2, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useSettings } from "@/contexts/SettingsContext";
 import { toast } from "sonner";
 
 interface AIAssistantProps {
@@ -12,6 +13,7 @@ interface AIAssistantProps {
 }
 
 export const AIAssistant = ({ selectedText, onInsertCode }: AIAssistantProps) => {
+  const { settings } = useSettings();
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +32,7 @@ export const AIAssistant = ({ selectedText, onInsertCode }: AIAssistantProps) =>
         body: {
           prompt: prompt,
           context: selectedText,
+          model: settings.aiModel,
         },
       });
 

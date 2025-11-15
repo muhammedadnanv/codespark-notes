@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Settings } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 export const Header = () => {
@@ -11,6 +13,12 @@ export const Header = () => {
             <h1 className="text-lg font-semibold text-foreground">AI Notepad</h1>
             <p className="text-xs text-muted-foreground">Developer Edition</p>
           </div>
+        </Link>
+        <Link to="/settings">
+          <Button variant="ghost" size="sm" className="ml-auto">
+            <Settings className="w-4 h-4 mr-2" />
+            Settings
+          </Button>
         </Link>
       </div>
     </header>
