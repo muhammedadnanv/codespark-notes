@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useSettings } from "@/contexts/SettingsContext";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import javascript from "react-syntax-highlighter/dist/esm/languages/hljs/javascript";
@@ -18,7 +19,7 @@ SyntaxHighlighter.registerLanguage("cpp", cpp);
 SyntaxHighlighter.registerLanguage("css", css);
 SyntaxHighlighter.registerLanguage("html", html);
 
-interface EditorProps {
+interface EditorComponentProps {
   content: string;
   onChange: (content: string) => void;
   onSelect: () => void;
@@ -55,9 +56,17 @@ const detectCodeBlocks = (text: string) => {
   return parts.length > 0 ? parts : [{ type: "text" as const, content: text }];
 };
 
-export const Editor = ({ content, onChange, onSelect }: EditorProps) => {
+export const EditorComponent = ({ content, onChange, onSelect }: EditorComponentProps) => {
+  const { settings } = useSettings();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const parts = detectCodeBlocks(content);
+
+  const fontSizeMap = {
+    small: "12px",
+    medium: "14px",
+    large: "16px",
+    xlarge: "18px",
+  };
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -76,9 +85,10 @@ export const Editor = ({ content, onChange, onSelect }: EditorProps) => {
             onChange={(e) => onChange(e.target.value)}
             onMouseUp={onSelect}
             placeholder="Start typing... Use ``` to create code blocks (e.g., ```javascript)"
-            className="w-full bg-transparent text-foreground font-mono text-sm resize-none outline-none min-h-[calc(100vh-12rem)]"
+            className="w-full bg-transparent text-foreground font-mono resize-none outline-none min-h-[calc(100vh-12rem)]"
             style={{ 
               caretColor: "hsl(var(--primary))",
+              fontSize: fontSizeMap[settings.fontSize],
             }}
           />
           {content && (
